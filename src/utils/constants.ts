@@ -72,7 +72,8 @@ const SOCKET_EVENTS = {
   ERROR: 'error',
   MESSAGE: 'message',
   BROADCAST: 'broadcast',
-  NOTIFICATION: 'notification'
+  NOTIFICATION: 'notification',
+  RECONNECT: 'reconnect'
 } as const;
 
 /**
