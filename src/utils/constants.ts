@@ -69,7 +69,10 @@ const SOCKET_EVENTS = {
   GAME_STATE_UPDATE: 'game-state-update',
   TURN_TIMEOUT: 'turn-timeout',
   GAME_OVER: 'game-over',
-  ERROR: 'error'
+  ERROR: 'error',
+  MESSAGE: 'message',
+  BROADCAST: 'broadcast',
+  NOTIFICATION: 'notification'
 } as const;
 
 /**
@@ -81,7 +84,8 @@ const ERROR_MESSAGES = {
   NOT_YOUR_TURN: 'It is not your turn',
   GAME_FULL: 'Server is at capacity',
   PLAYER_NOT_FOUND: 'Player not found',
-  ROOM_NOT_FOUND: 'Game room not found'
+  ROOM_NOT_FOUND: 'Game room not found',
+  RECIPIENT_NOT_FOUND: 'Recipient not found'
 } as const;
 
 export {

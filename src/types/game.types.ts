@@ -15,6 +15,7 @@ export interface IPlayer {
   ships: IShip[];
   isAlive: boolean;
   socket: Socket;
+  opponent?: IPlayer;
 }
 
 export interface IGameRoom{

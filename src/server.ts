@@ -26,6 +26,10 @@ io.on('connection', (socket) => {
     GameManager.tryCreateMatch();
   });
 
+  socket.on(SOCKET_EVENTS.MESSAGE, ({ recipientId, message }) => {
+    GameManager.handleMessage(socket, recipientId, message);
+  });
+
   socket.on('disconnect', () => {
     console.log(`Client disconnected: ${socket.id}`);
     GameManager.removePlayer(socket.id);
