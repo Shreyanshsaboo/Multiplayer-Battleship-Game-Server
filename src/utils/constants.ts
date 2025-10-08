@@ -63,6 +63,7 @@ const SOCKET_EVENTS = {
   JOIN_GAME: 'join_game',
   PLACE_SHIPS: 'place_ships',
   ATTACK: 'attack',
+  ATTACK_RESULT: 'attack_result',
   MATCH_FOUND: 'match-found',
   WAITING_FOR_OPPONENT: 'waiting-for-opponent',
   GAME_STATE_UPDATE: 'game-state-update',

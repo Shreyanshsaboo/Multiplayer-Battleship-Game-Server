@@ -1,4 +1,5 @@
 import { CELL_STATES, GAME_PHASES, SHIPS } from "../utils/constants";
+import { Socket } from 'socket.io';
 
 export type GamePhase = typeof GAME_PHASES[keyof typeof GAME_PHASES];
 export type CellState = typeof CELL_STATES[keyof typeof CELL_STATES];
@@ -13,6 +14,7 @@ export interface IPlayer {
   isReady: boolean;
   ships: IShip[];
   isAlive: boolean;
+  socket: Socket;
 }
 
 export interface IGameRoom{
