@@ -6,11 +6,13 @@ import MatchmakingManager from './MatchmakingManager';
 import RoomManager from './RoomManager';
 import GameLogicManager from './GameLogicManager';
 import CommunicationManager from './CommunicationManager';
+import GameStateManager from './GameStateManager/GameStateManager';
 
 class GameManager {
   private static instance: GameManager;
   private roomManager = RoomManager;
   private communicationManager = CommunicationManager;
+  private gameState: 'waiting' | 'in-progress' | 'finished' = 'waiting';
 
   private constructor() {}
 
@@ -21,20 +23,39 @@ class GameManager {
     return GameManager.instance;
   }
 
+  public setGameState(state: 'waiting' | 'in-progress' | 'finished'): void {
+    this.gameState = state;
+  }
+
+  public getGameState(): 'waiting' | 'in-progress' | 'finished' {
+    return this.gameState;
+  }
+
   public addPlayerToQueue(player: IPlayer): void {
     MatchmakingManager.addPlayerToQueue(player);
   }
 
   public tryCreateMatch(): void {
+    if (GameStateManager.getGameState() !== 'waiting') {
+      console.error('Cannot create a match unless the game is in the waiting state.');
+      return;
+    }
+
     if (MatchmakingManager.tryCreateMatch()) {
       const player1 = MatchmakingManager.getQueue().shift()!;
       const player2 = MatchmakingManager.getQueue().shift()!;
       const room = RoomManager.createGameRoom(player1, player2);
       RoomManager.getActiveRooms().set(room.id, room);
+      GameStateManager.setGameState('in-progress');
     }
   }
 
   public handleAttack(socket: Socket, payload: IAttackPayload): void {
+    if (GameStateManager.getGameState() !== 'in-progress') {
+      CommunicationManager.sendError(socket, 'Game is not in progress.');
+      return;
+    }
+
     const player = RoomManager.getPlayerBySocketId(socket.id);
     if (!player) {
       CommunicationManager.sendError(socket, ERROR_MESSAGES.PLAYER_NOT_FOUND);
@@ -54,6 +75,7 @@ class GameManager {
     if (GameLogicManager['checkWinCondition'](opponent)) {
       room.phase = GAME_PHASES.FINISHED;
       CommunicationManager.emitGameOver(room, player.id);
+      this.setGameState('finished');
     }
   }
 
