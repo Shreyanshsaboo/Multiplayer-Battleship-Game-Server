@@ -70,11 +70,9 @@ class GameManager {
     RoomManager.getActiveRooms().forEach((room) => {
       const updatedPlayers = room.players.filter(player => player.socketId !== socketId);
       if (updatedPlayers.length === 1) {
-        // If only one player remains, handle the room cleanup or notify the remaining player
         this.roomManager.cleanupRoom(room.id);
         this.communicationManager.notifyPlayer(updatedPlayers[0].socketId, 'Your opponent has left the game.');
       } else if (updatedPlayers.length === 0) {
-        // If no players remain, remove the room
         this.roomManager.cleanupRoom(room.id);
       }
     });
